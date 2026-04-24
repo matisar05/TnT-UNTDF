@@ -1,29 +1,46 @@
-import { useRouter } from 'expo-router';
+import { useRouter, usePathname } from 'expo-router';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { tema } from '../../constants/tema';
 
 export const TabBar = () => {
   const router = useRouter();
+  const pathname = usePathname();
+
+  const isHome = pathname === '/';
+  const isListas = pathname.startsWith('/listas');
+  const isCamara = pathname.startsWith('/camara'); // For future implementation
 
   return (
     <View style={styles.tabBar}>
       <TouchableOpacity 
         style={styles.tabCell} 
         onPress={() => {
-          // Navegar a home solo si no estamos ya allí
+          // Navegar a home mediante navigate (solo si no estamos ya allí)
           router.navigate('/');
         }}
       >
-        <Text style={[styles.tabLabel, { color: tema.colors.primary, fontWeight: 'bold' }]}>[Home]</Text>
+        <Text style={[
+          styles.tabLabel, 
+          isHome && { color: tema.colors.primary, fontWeight: 'bold' }
+        ]}>[Home]</Text>
       </TouchableOpacity>
       <View style={styles.tabCell}>
-        <Text style={styles.tabLabel}>[Cámara]</Text>
+        <Text style={[
+          styles.tabLabel,
+          isCamara && { color: tema.colors.primary, fontWeight: 'bold' }
+        ]}>[Cámara]</Text>
       </View>
       <TouchableOpacity 
         style={styles.tabCell} 
-        onPress={() => router.push('/listas')}
+        onPress={() => {
+          // Navegar usando navigate para no amontonar en el stack si ya estamos ahí
+          router.navigate('/listas');
+        }}
       >
-        <Text style={styles.tabLabel}>[Listas]</Text>
+        <Text style={[
+          styles.tabLabel,
+          isListas && { color: tema.colors.primary, fontWeight: 'bold' }
+        ]}>[Listas]</Text>
       </TouchableOpacity>
     </View>
   );
