@@ -16,7 +16,7 @@ export const TarjetaCategoria = ({ nombre, slug, icono, color }: TarjetaCategori
   return (
     <TouchableOpacity
       style={styles.container}
-      onPress={() => router.navigate(`/categoria/${slug}`)}
+      onPress={() => router.push(`/categoria/${slug}`)}
       activeOpacity={0.7}
     >
       <View style={[styles.iconContainer, { backgroundColor: color || tema.colors.primary + '20' }]}>
