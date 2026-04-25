@@ -1,47 +1,49 @@
+import { FC } from 'react';
 import { useRouter, usePathname } from 'expo-router';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, Pressable, View } from 'react-native';
 import { tema } from '../../constants/tema';
+import { ROUTES } from '../../navigation/routes';
 
-export const TabBar = () => {
+export const TabBar: FC = () => {
   const router = useRouter();
   const pathname = usePathname();
 
-  const isHome = pathname === '/';
-  const isListas = pathname.startsWith('/listas');
-  const isCamara = pathname.startsWith('/camara'); // For future implementation
+  const isHome = pathname === ROUTES.HOME;
+  const isListas = pathname.startsWith(ROUTES.LISTAS);
+  const isCamara = pathname.startsWith(ROUTES.CAMARA);
 
   return (
     <View style={styles.tabBar}>
-      <TouchableOpacity 
+      <Pressable 
         style={styles.tabCell} 
         onPress={() => {
           // Navegar a home mediante navigate (solo si no estamos ya allí)
-          router.navigate('/');
+          router.navigate({ pathname: ROUTES.HOME });
         }}
       >
         <Text style={[
           styles.tabLabel, 
           isHome && { color: tema.colors.primary, fontWeight: 'bold' }
         ]}>[Home]</Text>
-      </TouchableOpacity>
+      </Pressable>
       <View style={styles.tabCell}>
         <Text style={[
           styles.tabLabel,
           isCamara && { color: tema.colors.primary, fontWeight: 'bold' }
         ]}>[Cámara]</Text>
       </View>
-      <TouchableOpacity 
+      <Pressable 
         style={styles.tabCell} 
         onPress={() => {
           // Navegar usando navigate para no amontonar en el stack si ya estamos ahí
-          router.navigate('/listas');
+          router.navigate({ pathname: ROUTES.LISTAS });
         }}
       >
         <Text style={[
           styles.tabLabel,
           isListas && { color: tema.colors.primary, fontWeight: 'bold' }
         ]}>[Listas]</Text>
-      </TouchableOpacity>
+      </Pressable>
     </View>
   );
 };
@@ -64,7 +66,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   tabLabel: {
-    fontSize: 12,
+    fontSize: tema.text.sm,
     color: tema.colors.textSecondary,
   },
 });

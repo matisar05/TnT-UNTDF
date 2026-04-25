@@ -30,20 +30,20 @@ const styles = StyleSheet.create({
   dashed: {
     borderStyle: 'dashed',
     borderWidth: 1,
-    borderColor: '#CCCCCC',
+    borderColor: tema.colors.border,
     justifyContent: 'center',
     alignItems: 'center',
   },
   label: {
     color: tema.colors.textSecondary,
-    fontSize: 13,
+    fontSize: tema.text.base,
     textAlign: 'center',
   },
   header: {
     height: 100,
   },
   list: {
-    margin: 16,
+    margin: tema.spacing.md,
     height: 400,
   },
 });

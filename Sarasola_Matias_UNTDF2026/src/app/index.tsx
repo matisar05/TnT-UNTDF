@@ -42,36 +42,36 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    paddingBottom: 80,
+    paddingBottom: tema.spacing.xl * 2, // 80 -> xl(40) * 2
   },
   banner: {
-    margin: 16,
+    margin: tema.spacing.md,
     height: 80,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#CCCCCC',
+    borderColor: tema.colors.border,
     borderStyle: 'dashed',
   },
   bannerText: {
     color: tema.colors.textSecondary,
-    fontSize: 13,
+    fontSize: tema.text.base,
   },
   section: {
-    margin: 16,
+    margin: tema.spacing.md,
   },
   sectionTitle: {
-    fontSize: 16,
+    fontSize: tema.text.lg,
     fontWeight: '600',
     color: tema.colors.text,
-    marginBottom: 8,
+    marginBottom: tema.spacing.sm,
   },
   horizontalPlaceholder: {
     height: 100,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#CCCCCC',
+    borderColor: tema.colors.border,
     borderStyle: 'dashed',
   },
   gridPlaceholder: {
@@ -79,12 +79,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#CCCCCC',
+    borderColor: tema.colors.border,
     borderStyle: 'dashed',
   },
   placeholderText: {
     color: tema.colors.textSecondary,
-    fontSize: 13,
+    fontSize: tema.text.base,
   },
 });
 

@@ -1,12 +1,15 @@
+import { useLocalSearchParams } from 'expo-router';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { tema } from '../../constants/tema';
 
 export default function ProductScreen() {
+  const { barcode } = useLocalSearchParams<{ barcode: string }>();
+
   return (
     <ScrollView style={styles.scroll}>
 
       <View style={[styles.dashed, styles.image]}>
-        <Text style={styles.label}>[Imagen del producto]</Text>
+        <Text style={styles.label}>[Imagen del producto {barcode}]</Text>
       </View>
 
       <View style={[styles.dashed, styles.info]}>
@@ -37,32 +40,32 @@ const styles = StyleSheet.create({
   dashed: {
     borderStyle: 'dashed',
     borderWidth: 1,
-    borderColor: '#CCCCCC',
+    borderColor: tema.colors.border,
     justifyContent: 'center',
     alignItems: 'center',
   },
   label: {
     color: tema.colors.textSecondary,
-    fontSize: 13,
+    fontSize: tema.text.base,
     textAlign: 'center',
   },
   image: {
     height: 220,
   },
   info: {
-    margin: 16,
+    margin: tema.spacing.md,
     height: 120,
   },
   ingredients: {
-    margin: 16,
+    margin: tema.spacing.md,
     height: 100,
   },
   nutrition: {
-    margin: 16,
+    margin: tema.spacing.md,
     height: 160,
   },
   recipe: {
-    margin: 16,
+    margin: tema.spacing.md,
     height: 100,
   },
 });

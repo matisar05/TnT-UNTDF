@@ -21,7 +21,7 @@ export default function ListasScreen() {
             <TarjetaCategoria
               nombre={item.nombre}
               slug={item.slug}
-              icono={item.icono as any}
+              icono={item.icono as unknown as keyof typeof import('@expo/vector-icons').Ionicons.glyphMap}
               color={item.color}
             />
           )}
@@ -41,11 +41,11 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    paddingHorizontal: 20,
+    paddingHorizontal: tema.spacing.lg,
   },
   header: {
-    marginTop: 20,
-    marginBottom: 24,
+    marginTop: tema.spacing.lg,
+    marginBottom: tema.spacing.xl,
   },
   title: {
     fontSize: 28,
@@ -53,9 +53,9 @@ const styles = StyleSheet.create({
     color: tema.colors.text,
   },
   subtitle: {
-    fontSize: 14,
+    fontSize: tema.text.base,
     color: tema.colors.textSecondary,
-    marginTop: 4,
+    marginTop: tema.spacing.xs,
   },
   listContent: {
     paddingBottom: 100, // Espacio para el tab bar si fuera necesario

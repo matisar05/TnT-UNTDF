@@ -5,14 +5,13 @@ import { TarjetaProducto } from '../../components/producto/TarjetaProducto';
 import { PRODUCTOS_POR_CATEGORIA } from '../../constants/productos';
 
 export default function CategoryScreen() {
-  const { slug } = useLocalSearchParams();
-  const router = useRouter();
+  const { slug } = useLocalSearchParams<{ slug: string }>();
 
-  const titulo = typeof slug === 'string' 
+  const titulo = slug
     ? slug.charAt(0).toUpperCase() + slug.slice(1).replace('-', ' ') 
     : 'Categoría';
 
-  const productos = (typeof slug === 'string' && PRODUCTOS_POR_CATEGORIA[slug]) 
+  const productos = (slug && PRODUCTOS_POR_CATEGORIA[slug]) 
     ? PRODUCTOS_POR_CATEGORIA[slug] 
     : PRODUCTOS_POR_CATEGORIA.default;
 
@@ -53,31 +52,31 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    paddingHorizontal: 20,
+    paddingHorizontal: tema.spacing.lg,
   },
   dashed: {
     borderStyle: 'dashed',
     borderWidth: 1,
-    borderColor: '#CCCCCC',
+    borderColor: tema.colors.border,
     justifyContent: 'center',
     alignItems: 'center',
   },
   label: {
     color: tema.colors.textSecondary,
-    fontSize: 13,
+    fontSize: tema.text.base,
     textAlign: 'center',
   },
   search: {
     height: 44,
-    marginVertical: 16,
+    marginVertical: tema.spacing.md,
   },
   listContent: {
-    paddingBottom: 40,
+    paddingBottom: tema.spacing.xl,
   },
   resultCount: {
-    fontSize: 12,
+    fontSize: tema.text.sm,
     color: tema.colors.textSecondary,
-    marginBottom: 16,
+    marginBottom: tema.spacing.md,
     fontWeight: '500',
   },
 });

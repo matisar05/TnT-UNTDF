@@ -1,24 +1,25 @@
+import { FC } from 'react';
 import { useRouter } from 'expo-router';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, Text, Pressable, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { tema } from '../../constants/tema';
+import { ROUTES } from '../../navigation/routes';
 
-interface TarjetaProductoProps {
+type TarjetaProductoProps = {
   nombre: string;
   marca: string;
   barcode: string;
   puntuacion?: number;
   imagen?: string;
-}
+};
 
-export const TarjetaProducto = ({ nombre, marca, barcode, puntuacion = 85, imagen }: TarjetaProductoProps) => {
+export const TarjetaProducto: FC<TarjetaProductoProps> = ({ nombre, marca, barcode, puntuacion = 85, imagen }) => {
   const router = useRouter();
 
   return (
-    <TouchableOpacity
+    <Pressable
       style={styles.container}
-      onPress={() => router.navigate(`/producto/${barcode}`)}
-      activeOpacity={0.8}
+      onPress={() => router.navigate({ pathname: ROUTES.PRODUCTO, params: { barcode } })}
     >
       <View style={styles.imageContainer}>
         {imagen ? (
@@ -42,7 +43,7 @@ export const TarjetaProducto = ({ nombre, marca, barcode, puntuacion = 85, image
           <Ionicons name="heart-outline" size={20} color={tema.colors.textSecondary} />
         </View>
       </View>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 

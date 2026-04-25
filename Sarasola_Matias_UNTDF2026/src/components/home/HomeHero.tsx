@@ -1,18 +1,19 @@
+import { FC } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { tema } from '../../constants/tema';
 
-export const HomeHero = () => {
+export const HomeHero: FC = () => {
   return (
     <View style={styles.hero}>
       <View style={styles.dashed}>
         <Text style={styles.heroLabel}>[¡Bienvenido "usuario X"!]</Text>
       </View>
 
-      <View style={[styles.dashed, styles.mt8]}>
+      <View style={styles.dashed}>
         <Text style={styles.heroLabel}>[Barra de búsqueda]</Text>
       </View>
 
-      <View style={[styles.dashed, styles.row, styles.mt8]}>
+      <View style={[styles.dashed, styles.row]}>
         <View style={styles.cell}>
           <Text style={styles.heroLabel}>[Perfil]</Text>
         </View>
@@ -33,36 +34,34 @@ export const HomeHero = () => {
 const styles = StyleSheet.create({
   hero: {
     backgroundColor: tema.colors.primary,
-    padding: 20,
-    paddingTop: 40,
+    padding: tema.spacing.lg,
+    paddingTop: tema.spacing.xl,
+    gap: tema.spacing.sm,
   },
   dashed: {
     borderStyle: 'dashed',
     borderWidth: 1,
-    borderColor: '#CCCCCC',
+    borderColor: tema.colors.border,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 8,
+    padding: tema.spacing.sm,
   },
   heroLabel: {
     color: tema.colors.bannerText,
-    fontSize: 13,
+    fontSize: tema.text.base,
     textAlign: 'center',
   },
   row: {
     flexDirection: 'row',
+    gap: tema.spacing.xs,
   },
   cell: {
     flex: 1,
     borderStyle: 'dashed',
     borderWidth: 1,
-    borderColor: '#CCCCCC',
+    borderColor: tema.colors.border,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 8,
-    margin: 2,
-  },
-  mt8: {
-    marginTop: 8,
+    padding: tema.spacing.sm,
   },
 });

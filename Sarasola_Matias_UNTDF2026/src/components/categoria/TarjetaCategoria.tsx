@@ -1,33 +1,34 @@
+import { FC } from 'react';
 import { useRouter } from 'expo-router';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, Pressable, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { tema } from '../../constants/tema';
+import { ROUTES } from '../../navigation/routes';
 
-interface TarjetaCategoriaProps {
+type TarjetaCategoriaProps = {
   nombre: string;
   slug: string;
-  icono: keyof typeof Ionicons.prototype.getRawProps;
+  icono: keyof typeof Ionicons.glyphMap;
   color?: string;
-}
+};
 
-export const TarjetaCategoria = ({ nombre, slug, icono, color }: TarjetaCategoriaProps) => {
+export const TarjetaCategoria: FC<TarjetaCategoriaProps> = ({ nombre, slug, icono, color }) => {
   const router = useRouter();
 
   return (
-    <TouchableOpacity
+    <Pressable
       style={styles.container}
-      onPress={() => router.push(`/categoria/${slug}`)}
-      activeOpacity={0.7}
+      onPress={() => router.push({ pathname: ROUTES.CATEGORIA, params: { slug } })}
     >
       <View style={[styles.iconContainer, { backgroundColor: color || tema.colors.primary + '20' }]}>
-        <Ionicons name={icono as any} size={28} color={color || tema.colors.primary} />
+        <Ionicons name={icono} size={28} color={color || tema.colors.primary} />
       </View>
       <View style={styles.textContainer}>
         <Text style={styles.nombre}>{nombre}</Text>
         <Text style={styles.subtitulo}>Ver productos</Text>
       </View>
       <Ionicons name="chevron-forward" size={20} color={tema.colors.textSecondary} />
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 
