@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis Arquitectónico - React Native / Expo</title>
+    <style>
+        :root {
+            --primary: #2C3E50;
+            --secondary: #34495E;
+            --accent: #3498DB;
+            --bg: #F8F9FA;
+            --text: #333333;
+            --code-bg: #282C34;
+            --code-text: #ABB2BF;
+            --border: #E0E0E0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: var(--bg);
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 2.5rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        h1 {
+            color: var(--primary);
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 0.5rem;
+            margin-top: 0;
+            font-size: 2.2rem;
+        }
+        h2 {
+            color: var(--secondary);
+            margin-top: 2.5rem;
+            font-size: 1.6rem;
+        }
+        h3 {
+            color: var(--accent);
+            margin-top: 2rem;
+            font-size: 1.3rem;
+        }
+        p {
+            font-size: 1.05rem;
+        }
+        ul {
+            padding-left: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        li {
+            margin-bottom: 0.8rem;
+            font-size: 1.05rem;
+        }
+        code {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            background-color: #F1F3F5;
+            color: #E83E8C;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        pre {
+            background-color: var(--code-bg);
+            color: var(--code-text);
+            padding: 1.5rem;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+        }
+        pre code {
+            background-color: transparent;
+            color: inherit;
+            padding: 0;
+        }
+        .keyword { color: #C678DD; }
+        .function { color: #61AFEF; }
+        .string { color: #98C379; }
+        .comment { color: #5C6370; font-style: italic; }
+        hr {
+            border: 0;
+            border-top: 1px solid var(--border);
+            margin: 3rem 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Análisis Arquitectónico y Estructural del Proyecto React Native / Expo</h1>
+    
+    <p>A continuación, se detalla la estructura y los archivos principales de este proyecto en React Native (utilizando Expo Router). La explicación es técnica, directa y orientada a entender la justificación arquitectónica detrás de cada decisión en el código.</p>
+
+    <hr>
+
+    <h2>1. Estructura de Carpetas</h2>
+    <p>La aplicación está contenida íntegramente dentro de la carpeta <code>src/</code> (Source). Agrupar todo aquí aísla el código fuente de los archivos de configuración de la raíz (como <code>package.json</code>, <code>.gitignore</code>, entre otros).</p>
+
+    <ul>
+        <li><strong><code>src/app/</code></strong>: Es el corazón de <strong>Expo Router</strong>. Aquí ocurre el <em>file-based routing</em> (enrutamiento basado en sistema de archivos). Cada archivo <code>.tsx</code> que se coloca aquí se vuelve automáticamente una pantalla navegable. La estructura de carpetas aquí define directamente las URLs internas de la app.</li>
+        <li><strong><code>src/components/</code></strong>: Los componentes visuales modulares que <strong>no</strong> son pantallas completas. Se dividen en subcarpetas lógicas (<code>home</code>, <code>layout</code>, <code>categoria</code>, <code>producto</code>) para mantener el orden. Son piezas reutilizables que actúan como bloques de construcción.</li>
+        <li><strong><code>src/constants/</code></strong>: Almacena variables estáticas e inmutables (como colores, tamaños de espaciado y datos de prueba locales). Separar esto en un módulo constante permite cambiar por completo la apariencia visual del sistema modificando un solo archivo, sin tener que tocar la lógica de los componentes.</li>
+        <li><strong><code>src/navigation/</code></strong>: Centraliza la lógica direccional, los catálogos o los diccionarios de URL permitidos en la aplicación.</li>
+    </ul>
+
+    <hr>
+
+    <h2>2. Análisis Archivo por Archivo (Línea por Línea clave)</h2>
+
+    <h3><code>src/navigation/routes.ts</code></h3>
+    <pre><code><span class="keyword">export const</span> ROUTES = {
+  HOME: <span class="string">'/'</span>,
+  CATEGORIA: <span class="string">'/categoria/[slug]'</span>,
+  <span class="comment">// ...</span>
+} <span class="keyword">as const</span>;</code></pre>
+    <ul>
+        <li><strong>¿Qué hace?</strong>: Exporta un objeto constante con todas las rutas posibles de la navegación en la aplicación.</li>
+        <li><strong>¿Por qué está así?</strong>: Utiliza sintaxis <code>as const</code> para convertir estas rutas en variables strictas de solo-lectura para TypeScript. Evitamos de este modo usar <em>strings literales</em> ("textos quemados al aire") en nuestros demás componentes. Si en el futuro una ruta cambia de nombre (ej. de <code>/categoria/</code> a <code>/seccion/</code>), se modifica en un solo lugar y se propaga automáticamente, previniendo links rotos o errores inesperados.</li>
+    </ul>
+
+    <h3><code>src/constants/tema.ts</code></h3>
+    <pre><code><span class="keyword">export const</span> tema = {
+  colors: { primary: <span class="string">'#E67E22'</span>, border: <span class="string">'#FAD390'</span>, ... },
+  spacing: { md: <span class="keyword">16</span>, lg: <span class="keyword">20</span>, ... },
+  text: { base: <span class="keyword">13</span>, lg: <span class="keyword">16</span> }
+};</code></pre>
+    <ul>
+        <li><strong>¿Qué hace?</strong>: Define los conocidos <em>Design Tokens</em> o directrices de sistema de diseño corporativo (todos los colores, radios, márgenes y sombras).</li>
+        <li><strong>¿Por qué está así?</strong>: El desarrollo moderno y limpio prohíbe fuertemente el uso de "Magic Numbers" (números aleatorios fijos en los View como <code>padding: 16</code>). Al utilizar <code>tema.spacing.md</code>, el diseño visual de toda la app se rige sobre una escala estándar y permite a futuro construir temas oscuros/claros sin reemplazar código.</li>
+    </ul>
+
+    <h3><code>src/app/_layout.tsx</code></h3>
+    <pre><code><span class="keyword">export default function</span> <span class="function">RootLayout</span>() {
+  <span class="keyword">return</span> (
+    &lt;Stack screenOptions={{ headerStyle: { backgroundColor: tema.colors.primary } }}&gt;
+       &lt;Stack.Screen name="index" options={{ headerShown: false }} /&gt;
+       &lt;Stack.Screen name="categoria/[slug]" /&gt;
+    &lt;/Stack&gt;
+  );
+}</code></pre>
+    <ul>
+        <li><strong>¿Qué hace?</strong>: Interviene fundamentalmente en todas las pantallas simultáneamente y genera una navegación tipo <code>Stack</code> (historial apilable de pantallas).</li>
+        <li><strong>¿Por qué está así?</strong>: Se aplican <code>screenOptions</code> globalmente para colorear la barra de navegación superior (Header) del color institucional en vez de pintarlo hoja por hoja. Declaramos la subruta <code>&lt;Stack.Screen name="index"&gt;</code> intencionalmente para apagar su header natural con <code>headerShown: false</code>, ya que el Home tiene un UI superior independiente (el <code>HomeHero</code>).</li>
+    </ul>
+
+    <h3><code>src/app/index.tsx</code> (Pantalla Principal)</h3>
+    <pre><code><span class="keyword">export default function</span> <span class="function">HomeScreen</span>() {
+  <span class="keyword">return</span> (
+    &lt;View style={styles.container}&gt;
+      &lt;ScrollView&gt;
+        &lt;HomeHero /&gt;
+        <span class="comment">{/* ... Secciones ... */}</span>
+      &lt;/ScrollView&gt;
+      &lt;TabBar /&gt;
+    &lt;/View&gt;
+  );
+}</code></pre>
+    <ul>
+        <li><strong>¿Qué hace?</strong>: Es la pantalla raíz o '/'. Forma todo el layout estructural principal integrando el módulo de <code>HomeHero</code> arriba y a <code>TabBar</code> inferior.</li>
+        <li><strong>¿Por qué está así?</strong>: Aplica Patrón de Diseño Inteligente: La pantalla se divide en submódulos para no abarrotarse de código. La pantalla "Index" es un <em>Smart Component</em> o ensamblador, en tanto a los componentes que llama son piezas simples. Se emplea un <code>ScrollView</code> envolviendo el contenido central para autorizar su desplazamiento vertical si los elementos del celular exceden su altura en píxeles.</li>
+    </ul>
+
+    <h3><code>src/app/categoria/[slug].tsx</code> (Ruta Dinámica)</h3>
+    <pre><code><span class="keyword">export default function</span> <span class="function">CategoryScreen</span>() {
+  <span class="keyword">const</span> { slug } = <span class="function">useLocalSearchParams</span>&lt;{ slug: <span class="keyword">string</span> }&gt;();
+  <span class="comment">// ...</span></code></pre>
+    <ul>
+        <li><strong>¿Qué hace?</strong>: Es una plantilla o pantalla renderizada al vuelo para mostrar los productos de la categoría consultada.</li>
+        <li><strong>¿Por qué está así (con corchetes)?</strong>: Expo Router detecta los corchetes <code>[slug]</code> y entiende "esto no es un archivo de nombre 'slug', es una variable". Extrae automáticamente la variable desde la URL y lo expone a través del el hook de Expo <code>useLocalSearchParams()</code>. Si el navegador empuja a <code>/categoria/limpieza</code>, <code>slug</code> capturará en su interior el valor <code>"limpieza"</code>.</li>
+    </ul>
+
+    <h3><code>src/components/categoria/TarjetaCategoria.tsx</code></h3>
+    <pre><code><span class="keyword">type</span> TarjetaCategoriaProps = {
+  nombre: <span class="keyword">string</span>;
+  slug: <span class="keyword">string</span>;
+  <span class="comment">// ...</span>
+};
+
+<span class="keyword">export const</span> <span class="function">TarjetaCategoria</span>: FC&lt;TarjetaCategoriaProps&gt; = ({ nombre, slug }) =&gt; {
+  <span class="keyword">const</span> router = <span class="function">useRouter</span>();
+
+  <span class="keyword">return</span> (
+    &lt;Pressable onPress={() =&gt; router.push({ pathname: ROUTES.CATEGORIA, params: { slug } })}&gt;
+       <span class="comment">{/* React Node GUI ... */}</span>
+    &lt;/Pressable&gt;
+  );
+};</code></pre>
+    <ul>
+        <li><strong>¿Qué hace?</strong>: Una tarjeta interactiva modular para navegar los datos particulares de una categoría.</li>
+        <li><strong>¿Por qué está así?</strong>:
+            <ol>
+                <li>Usamos <code>type</code> de TypeScript para acorazar estructuralmente el diseño de las propiedades e impedir que alguien invoque mal a la tarjeta.</li>
+                <li>Usa Tipos Estrictos (<code>FC</code> / Functional Component) para el análisis perito del compilador sin fallas en los sub-nodos.</li>
+                <li>Reemplaza tecnología obsoleta (Touchables) por <code>Pressable</code>, un motor de interacciones más robusto y reaccionario frente al panel táctil. Se navega finalmente usando <code>router.push({ pathname, params })</code>, previniendo construir <em>endpoints</em> concatenados rotos.</li>
+            </ol>
+        </li>
+    </ul>
+
+    <h3><code>src/components/home/HomeHero.tsx</code></h3>
+    <pre><code>  hero: {
+    backgroundColor: tema.colors.primary,
+    padding: tema.spacing.lg,
+    paddingTop: tema.spacing.xl,
+    gap: tema.spacing.sm, <span class="comment">// Distribuye los espacios entre subcarpetas</span>
+  },</code></pre>
+    <ul>
+        <li><strong>¿Qué hace?</strong>: Genera el cuadro informativo naranja ubicado en la azotea de la página.</li>
+        <li><strong>¿Por qué está así (estilos)?</strong>: Emplea utilidades Flexbox modernas de React Native. Se utiliza la propiedad <code>gap: tema.spacing.sm</code> en el nodo raíz; que distribuye matemáticamente distancias exactas de espacios huecos entre todos sus bloques hijos equitativamente. Históricamente tendríamos que haber colocado un <code>marginBottom</code> en cada hijo interior con lógica desordenada, lo cual resulta ineficiente.</li>
+    </ul>
+
+    <h3><code>src/components/layout/TabBar.tsx</code></h3>
+    <pre><code>  <span class="keyword">const</span> pathname = <span class="function">usePathname</span>();
+  <span class="keyword">const</span> isHome = pathname === ROUTES.HOME;
+  <span class="comment">// ...</span>
+  &lt;Text style={[styles.tabLabel, isHome && { color: tema.colors.primary, fontWeight: <span class="string">'bold'</span> } ]}&gt;</code></pre>
+    <ul>
+        <li><strong>¿Qué hace?</strong>: Un dock visible adosado en la porción plana inferior para rotar vistas ("Home", "Listas", "Cámara").</li>
+        <li><strong>¿Por qué está así?</strong>: Examina la presencia persistente del Hook <code>usePathname()</code> para entender secretamente que URL estamos visitando. Luego mediante lógica de cortocircuito (<code>isHome && ...</code>) la aplicamos localmente como prop visual enlazado en corchetes sobre la hoja de estilos: Solo si el archivo temporal confirma ser igual a "HOME", el estado activa las fuentes negritas y el color anaranjado de tema destacando selectivamente la navegación.</li>
+    </ul>
+
+</div>
+
+</body>
+</html>
