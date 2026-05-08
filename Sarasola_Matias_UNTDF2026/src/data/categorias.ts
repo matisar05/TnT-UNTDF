@@ -1,10 +1,8 @@
-import { Ionicons } from '@expo/vector-icons';
-
 export interface Categoria {
   id: string;
   nombre: string;
   slug: string;
-  icono: keyof typeof Ionicons.prototype.getRawProps;
+  icono: string;
   color: string;
 }
 

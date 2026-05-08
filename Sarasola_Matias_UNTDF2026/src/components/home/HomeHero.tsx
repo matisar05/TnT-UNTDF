@@ -1,29 +1,29 @@
-import { StyleSheet, Text, View } from 'react-native';
-import { tema } from '../../constants/tema';
+import { StyleSheet, Text, View } from "react-native";
+import { tema } from "@/src/data/tema";
 
-export const HomeHero = () => {
+export const HeroeInicio = () => {
   return (
-    <View style={styles.hero}>
-      <View style={styles.dashed}>
-        <Text style={styles.heroLabel}>[¡Bienvenido "usuario X"!]</Text>
+    <View style={styles.heroe}>
+      <View style={styles.saludo}>
+        <Text style={styles.textoSaludo}>¡Bienvenido!</Text>
       </View>
 
-      <View style={[styles.dashed, styles.mt8]}>
-        <Text style={styles.heroLabel}>[Barra de búsqueda]</Text>
+      <View style={[styles.barraBusqueda, styles.mt8]}>
+        <Text style={styles.textoBusqueda}>Buscar producto...</Text>
       </View>
 
-      <View style={[styles.dashed, styles.row, styles.mt8]}>
-        <View style={styles.cell}>
-          <Text style={styles.heroLabel}>[Perfil]</Text>
+      <View style={[styles.accionesRapidas, styles.mt8]}>
+        <View style={styles.celda}>
+          <Text style={styles.textoCelda}>Perfil</Text>
         </View>
-        <View style={styles.cell}>
-          <Text style={styles.heroLabel}>[Config]</Text>
+        <View style={styles.celda}>
+          <Text style={styles.textoCelda}>Historial</Text>
         </View>
-        <View style={styles.cell}>
-          <Text style={styles.heroLabel}>[Historial]</Text>
+        <View style={styles.celda}>
+          <Text style={styles.textoCelda}>Info</Text>
         </View>
-        <View style={styles.cell}>
-          <Text style={styles.heroLabel}>[Info]</Text>
+        <View style={styles.celda}>
+          <Text style={styles.textoCelda}>Config</Text>
         </View>
       </View>
     </View>
@@ -31,36 +31,43 @@ export const HomeHero = () => {
 };
 
 const styles = StyleSheet.create({
-  hero: {
+  heroe: {
     backgroundColor: tema.colors.primary,
     padding: 20,
-    paddingTop: 40,
+    paddingTop: 50,
+    paddingBottom: 30,
   },
-  dashed: {
-    borderStyle: 'dashed',
-    borderWidth: 1,
-    borderColor: '#CCCCCC',
-    justifyContent: 'center',
-    alignItems: 'center',
+  saludo: {
     padding: 8,
   },
-  heroLabel: {
+  textoSaludo: {
     color: tema.colors.bannerText,
-    fontSize: 13,
-    textAlign: 'center',
+    fontSize: 22,
+    fontWeight: "bold",
   },
-  row: {
-    flexDirection: 'row',
+  barraBusqueda: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 8,
+    padding: 12,
   },
-  cell: {
+  textoBusqueda: {
+    color: tema.colors.textSecondary,
+    fontSize: 14,
+  },
+  accionesRapidas: {
+    flexDirection: "row",
+  },
+  celda: {
     flex: 1,
-    borderStyle: 'dashed',
-    borderWidth: 1,
-    borderColor: '#CCCCCC',
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     padding: 8,
     margin: 2,
+  },
+  textoCelda: {
+    color: tema.colors.bannerText,
+    fontSize: 12,
+    textAlign: "center",
   },
   mt8: {
     marginTop: 8,
