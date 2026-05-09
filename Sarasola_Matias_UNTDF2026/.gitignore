@@ -36,7 +36,12 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
+# template code
+example/
 app-example
+
+# vscode
+.vscode/
 
 # generated native folders
 /ios
