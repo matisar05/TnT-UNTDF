@@ -34,7 +34,7 @@ export default function PantallaProducto() {
 
       <View style={styles.contenedorImagen}>
         {producto.imagen ? (
-          <Image source={{ uri: producto.imagen }} style={styles.imagen} />
+          <Image source={producto.imagen} style={styles.imagen} />
         ) : (
           <View style={styles.placeholderImagen}>
             <Ionicons name="fast-food-outline" size={64} color={tema.colors.border} />
@@ -155,13 +155,15 @@ const styles = StyleSheet.create({
   },
   contenedorImagen: {
     width: "100%",
-    height: 260,
+    height: 300,
+    maxWidth: 500,
+    alignSelf: "center",
     backgroundColor: "#F9F9F9",
   },
   imagen: {
     width: "100%",
     height: "100%",
-    resizeMode: "cover",
+    resizeMode: "contain",
   },
   placeholderImagen: {
     flex: 1,

@@ -1,3 +1,5 @@
+import { ImageSourcePropType } from "react-native";
+
 export interface InformacionNutricional {
   porcion: string;
   calorias: number;
@@ -15,7 +17,7 @@ export interface Producto {
   marca: string;
   barcode: string;
   puntuacion: number;
-  imagen?: string;
+  imagen?: ImageSourcePropType;
   ingredientes: string[];
   alergenos: string[];
   infoNutricional: InformacionNutricional;
@@ -30,7 +32,7 @@ export const PRODUCTOS_POR_CATEGORIA: Record<string, Producto[]> = {
       marca: 'Villavicencio',
       barcode: '779123400001',
       puntuacion: 95,
-      imagen: 'https://picsum.photos/seed/agua/400/400',
+      imagen: require('@/assets/images/productos/agua_villavicencio.jpg'),
       ingredientes: ['Agua mineral natural', 'Bicarbonato de sodio', 'Cloruro de sodio', 'Sulfato de magnesio'],
       alergenos: ['Ninguno'],
       infoNutricional: {
@@ -50,7 +52,7 @@ export const PRODUCTOS_POR_CATEGORIA: Record<string, Producto[]> = {
       marca: 'Coca Cola',
       barcode: '779123400002',
       puntuacion: 30,
-      imagen: 'https://picsum.photos/seed/cocacola/400/400',
+      imagen: require('@/assets/images/productos/coca_cola.jpg'),
       ingredientes: ['Agua carbonatada', 'Azúcar', 'Colorante caramelo', 'Ácido fosfórico', 'Aromatizantes naturales', 'Cafeína'],
       alergenos: ['Ninguno'],
       infoNutricional: {
@@ -70,7 +72,7 @@ export const PRODUCTOS_POR_CATEGORIA: Record<string, Producto[]> = {
       marca: 'Cepita',
       barcode: '779123400003',
       puntuacion: 65,
-      imagen: 'https://picsum.photos/seed/jugonaranja/400/400',
+      imagen: require('@/assets/images/productos/jugo_cepita.jpg'),
       ingredientes: ['Agua', 'Jugo de naranja concentrado', 'Azúcar', 'Ácido cítrico', 'Vitamina C'],
       alergenos: ['Ninguno'],
       infoNutricional: {
@@ -92,7 +94,7 @@ export const PRODUCTOS_POR_CATEGORIA: Record<string, Producto[]> = {
       marca: 'La Serenísima',
       barcode: '7791234567890',
       puntuacion: 85,
-      imagen: 'https://picsum.photos/seed/leche/400/400',
+      imagen: require('@/assets/images/productos/leche_serenisima.jpg'),
       ingredientes: ['Leche entera', 'Vitamina A', 'Vitamina D'],
       alergenos: ['Lactosa', 'Proteína de leche'],
       infoNutricional: {
@@ -113,7 +115,7 @@ export const PRODUCTOS_POR_CATEGORIA: Record<string, Producto[]> = {
       marca: 'Yogurísimo',
       barcode: '7791234567891',
       puntuacion: 72,
-      imagen: 'https://picsum.photos/seed/yogur/400/400',
+      imagen: require('@/assets/images/productos/yogur_yogurisimo.jpg'),
       ingredientes: ['Leche entera', 'Azúcar', 'Frutilla', 'Cultivos lácticos', 'Almidón modificado'],
       alergenos: ['Lactosa', 'Proteína de leche'],
       infoNutricional: {
@@ -133,7 +135,7 @@ export const PRODUCTOS_POR_CATEGORIA: Record<string, Producto[]> = {
       marca: 'Casancrem',
       barcode: '7791234567892',
       puntuacion: 68,
-      imagen: 'https://picsum.photos/seed/quesocrema/400/400',
+      imagen: require('@/assets/images/productos/queso_casancrem.jpg'),
       ingredientes: ['Leche entera', 'Crema de leche', 'Sal', 'Estabilizantes', 'Cultivos lácticos'],
       alergenos: ['Lactosa', 'Proteína de leche'],
       infoNutricional: {
@@ -155,7 +157,7 @@ export const PRODUCTOS_POR_CATEGORIA: Record<string, Producto[]> = {
       marca: 'Bimbo',
       barcode: '779123400011',
       puntuacion: 55,
-      imagen: 'https://picsum.photos/seed/panmolde/400/400',
+      imagen: require('@/assets/images/productos/pan_bimbo.jpg'),
       ingredientes: ['Harina de trigo enriquecida', 'Agua', 'Azúcar', 'Aceite vegetal', 'Levadura', 'Sal', 'Conservantes'],
       alergenos: ['Gluten', 'Trigo'],
       infoNutricional: {
@@ -175,7 +177,7 @@ export const PRODUCTOS_POR_CATEGORIA: Record<string, Producto[]> = {
       marca: 'Traviata',
       barcode: '779123400012',
       puntuacion: 70,
-      imagen: 'https://picsum.photos/seed/galletitas/400/400',
+      imagen: require('@/assets/images/productos/galletitas_traviata.jpg'),
       ingredientes: ['Harina de trigo', 'Aceite vegetal', 'Sal', 'Extracto de malta', 'Bicarbonato de sodio'],
       alergenos: ['Gluten', 'Trigo'],
       infoNutricional: {

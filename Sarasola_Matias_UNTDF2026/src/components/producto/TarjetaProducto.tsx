@@ -1,5 +1,5 @@
 import { useRouter } from "expo-router";
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import { Image, ImageSourcePropType, Pressable, StyleSheet, Text, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { tema } from "@/src/data/tema";
 import { construirRuta, RUTAS } from "@/src/navigation/routes";
@@ -9,7 +9,7 @@ interface PropsTarjetaProducto {
   marca: string;
   barcode: string;
   puntuacion?: number;
-  imagen?: string;
+  imagen?: ImageSourcePropType;
 }
 
 export const TarjetaProducto = ({ nombre, marca, barcode, puntuacion = 85, imagen }: PropsTarjetaProducto) => {
@@ -27,7 +27,7 @@ export const TarjetaProducto = ({ nombre, marca, barcode, puntuacion = 85, image
     >
       <View style={styles.contenedorImagen}>
         {imagen ? (
-          <Image source={{ uri: imagen }} style={styles.imagen} />
+          <Image source={imagen} style={styles.imagen} />
         ) : (
           <View style={styles.placeholderImagen}>
             <Ionicons name="fast-food-outline" size={32} color={tema.colors.border} />
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
   imagen: {
     width: "100%",
     height: "100%",
-    resizeMode: "cover",
+    resizeMode: "contain",
   },
   placeholderImagen: {
     flex: 1,
