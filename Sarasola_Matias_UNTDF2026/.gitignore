@@ -39,6 +39,12 @@ yarn-error.*
 
 app-example
 
+# autoestudio
+autoestudio
+autoestudio2
+autoEstudio3.md
+autoEstudio3.html
+
 # generated native folders
 /ios
 /android

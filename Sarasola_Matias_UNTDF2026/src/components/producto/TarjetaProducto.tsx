@@ -2,7 +2,7 @@ import { useRouter } from "expo-router";
 import { Image, ImageSourcePropType, Pressable, StyleSheet, Text, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { tema } from "@/src/data/tema";
-import { construirRuta, RUTAS } from "@/src/navigation/routes";
+import { buildRoute, RUTAS } from "@/src/navigation/routes";
 
 interface PropsTarjetaProducto {
   nombre: string;
@@ -16,7 +16,7 @@ export const TarjetaProducto = ({ nombre, marca, barcode, puntuacion = 85, image
   const router = useRouter();
 
   const irAProducto = () => {
-    router.push(construirRuta(RUTAS.PRODUCTO, { barcode }));
+    router.push(buildRoute(RUTAS.PRODUCTO, { barcode }));
   };
 
   return (

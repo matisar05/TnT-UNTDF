@@ -3,13 +3,13 @@ import { StyleSheet, Text, View } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import { TarjetaCategoria } from "@/src/components/categoria/TarjetaCategoria";
 import { CATEGORIAS } from "@/src/data/categorias";
-import { construirRuta, RUTAS } from "@/src/navigation/routes";
+import { buildRoute, RUTAS } from "@/src/navigation/routes";
 
 export default function PantallaListas() {
   const router = useRouter();
 
   const irACategoria = (slug: string) => {
-    router.push(construirRuta(RUTAS.CATEGORIA, { slug }));
+    router.push(buildRoute(RUTAS.CATEGORIA, { slug }));
   };
 
   return (

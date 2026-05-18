@@ -1,17 +1,17 @@
-import { HeroeInicio } from "@/src/components/home/HomeHero";
-import { construirRuta, RUTAS } from "@/src/navigation/routes";
+import { HomeHero } from "@/src/components/home/HomeHero";
+import { buildRoute, RUTAS } from "@/src/navigation/routes";
 import { Link } from "expo-router";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function PantallaInicio() {
   return (
     <ScrollView style={styles.scroll} contentContainerStyle={styles.content}>
-      <HeroeInicio />
+      <HomeHero />
 
       <View style={styles.seccion}>
         <Text style={styles.tituloSeccion}>Categorías Destacadas</Text>
         <View style={styles.filaTarjeta}>
-          <Link href={construirRuta(RUTAS.LISTAS)} style={styles.tarjeta}>
+          <Link href={buildRoute(RUTAS.LISTAS)} style={styles.tarjeta}>
             <Text style={styles.tituloTarjeta}>
               Todas las Categorías{"\n"}
               <Text style={styles.subTarjeta}>Explorar productos</Text>
@@ -22,7 +22,7 @@ export default function PantallaInicio() {
 
       <View style={styles.seccion}>
         <Text style={styles.tituloSeccion}>Mis Favoritos</Text>
-        <Link href={construirRuta(RUTAS.FAVORITOS)} style={styles.tarjeta}>
+        <Link href={buildRoute(RUTAS.FAVORITOS)} style={styles.tarjeta}>
           <Text style={styles.tituloTarjeta}>
             Ver Favoritos{"\n"}
             <Text style={styles.subTarjeta}>Productos guardados</Text>

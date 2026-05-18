@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import { tema } from "@/src/data/tema";
 
-export const HeroeInicio = () => {
+export const HomeHero = () => {
   return (
     <View style={styles.heroe}>
       <View style={styles.saludo}>

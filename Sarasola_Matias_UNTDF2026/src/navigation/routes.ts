@@ -11,7 +11,7 @@ export const RUTAS = {
 export type RutaApp = (typeof RUTAS)[keyof typeof RUTAS];
 type ParamsRuta = Record<string, string | number | boolean | undefined>;
 
-export const construirRuta = (ruta: RutaApp, params?: ParamsRuta): Href => {
+export const buildRoute = (ruta: RutaApp, params?: ParamsRuta): Href => {
   if (!params) {
     return ruta as Href;
   }
