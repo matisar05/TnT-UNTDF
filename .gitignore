@@ -37,13 +37,12 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
-app-example
-
 # autoestudio
-autoestudio
-autoestudio2
+autoEstudio.md
+autoEstudio2.md 
 autoEstudio3.md
 autoEstudio3.html
+opencode.json
 
 # generated native folders
 /ios
