@@ -1,13 +1,16 @@
-export async function getCategoriesV3(query: string = ""): Promise<string[]> {
+export async function getCategoriesV3(query?: string): Promise<string[]> {
   const BASE_URL = process.env.EXPO_PUBLIC_API_URL;
   const baseUrl = `${BASE_URL}/v3/taxonomy_suggestions`;
 
   const params = new URLSearchParams({
     tagtype: "categories",
     lc: "es",
-    string: query,
     limit: "20",
   });
+
+  if (query) {
+    params.set("string", query);
+  }
 
   const response = await fetch(`${baseUrl}?${params.toString()}`, {
     headers: {

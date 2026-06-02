@@ -1,8 +1,17 @@
 import { useRouter } from "expo-router";
-import { Image, ImageSourcePropType, Pressable, StyleSheet, Text, View } from "react-native";
+import { useCallback, useEffect, useState } from "react";
+import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Image } from "expo-image";
+import { ImageSourcePropType } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { tema } from "@/src/data/tema";
 import { buildRoute, RUTAS } from "@/src/navigation/routes";
+import {
+  addFavorito,
+  isFavorito,
+  removeFavorito,
+  ProductoFavorito,
+} from "@/src/services/favoritos.service";
 
 interface PropsTarjetaProducto {
   nombre: string;
@@ -10,13 +19,65 @@ interface PropsTarjetaProducto {
   barcode: string;
   puntuacion?: number;
   imagen?: ImageSourcePropType;
+  ingredientes?: string[];
+  alergenos?: string[];
+  infoNutricional?: {
+    porcion: string;
+    calorias: number;
+    grasasTotales: number;
+    grasasSaturadas: number;
+    carbohidratos: number;
+    azucares: number;
+    proteinas: number;
+    sodio: number;
+  };
+  receta?: string;
 }
 
-export const TarjetaProducto = ({ nombre, marca, barcode, puntuacion = 85, imagen }: PropsTarjetaProducto) => {
+function extraerImagenUrl(imagen: unknown): string | undefined {
+  if (imagen && typeof imagen === "object" && "uri" in imagen) {
+    return (imagen as { uri: string }).uri;
+  }
+  return undefined;
+}
+
+export const TarjetaProducto = ({ nombre, marca, barcode, puntuacion = 85, imagen, ingredientes, alergenos, infoNutricional, receta }: PropsTarjetaProducto) => {
   const router = useRouter();
+  const [esFav, setEsFav] = useState(false);
+
+  useEffect(() => {
+    isFavorito(barcode).then(setEsFav);
+  }, [barcode]);
+
+  const toggleFavorito = useCallback(async () => {
+    if (esFav) {
+      await removeFavorito(barcode);
+      setEsFav(false);
+    } else {
+      const fav: ProductoFavorito = {
+        barcode,
+        nombre,
+        marca,
+        puntuacion,
+        imagenUrl: extraerImagenUrl(imagen),
+      };
+      await addFavorito(fav);
+      setEsFav(true);
+    }
+  }, [esFav, barcode, nombre, marca, puntuacion, imagen]);
 
   const irAProducto = () => {
-    router.push(buildRoute(RUTAS.PRODUCTO, { barcode }));
+    router.push(buildRoute(RUTAS.PRODUCTO, {
+      barcode,
+      nombre,
+      marca,
+      puntuacion: String(puntuacion),
+      imagenUrl: extraerImagenUrl(imagen) ?? "",
+      ingredientes: JSON.stringify(ingredientes ?? []),
+      alergenos: JSON.stringify(alergenos ?? []),
+      infoNutricional: JSON.stringify(infoNutricional ?? null),
+      receta: receta ?? "",
+    }));
   };
 
   return (
@@ -27,7 +88,7 @@ export const TarjetaProducto = ({ nombre, marca, barcode, puntuacion = 85, image
     >
       <View style={styles.contenedorImagen}>
         {imagen ? (
-          <Image source={imagen} style={styles.imagen} />
+          <Image source={imagen} style={styles.imagen} contentFit="contain" transition={200} />
         ) : (
           <View style={styles.placeholderImagen}>
             <Ionicons name="fast-food-outline" size={32} color={tema.colors.border} />
@@ -44,7 +105,16 @@ export const TarjetaProducto = ({ nombre, marca, barcode, puntuacion = 85, image
             <View style={[styles.puntoPuntaje, { backgroundColor: puntuacion > 70 ? "#2ECC71" : "#F1C40F" }]} />
             <Text style={styles.textoPuntaje}>{puntuacion}/100</Text>
           </View>
-          <Ionicons name="heart-outline" size={20} color={tema.colors.textSecondary} />
+          <Pressable
+            onPress={toggleFavorito}
+            hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+          >
+            <Ionicons
+              name={esFav ? "heart" : "heart-outline"}
+              size={20}
+              color={esFav ? "#E74C3C" : tema.colors.textSecondary}
+            />
+          </Pressable>
         </View>
       </View>
     </Pressable>
@@ -72,7 +142,6 @@ const styles = StyleSheet.create({
   imagen: {
     width: "100%",
     height: "100%",
-    resizeMode: "contain",
   },
   placeholderImagen: {
     flex: 1,

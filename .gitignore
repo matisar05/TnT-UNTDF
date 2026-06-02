@@ -38,11 +38,14 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
-# autoestudio
+# estudio personal
 autoEstudio.md
-autoEstudio2.md 
+autoEstudio2.md
 autoEstudio3.md
 autoEstudio3.html
+autoEstudio4.md
+COMPARATIVA.md
+CONTEXTO.md
 opencode.json
 
 # generated native folders

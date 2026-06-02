@@ -1,9 +1,15 @@
 import { StyleSheet, Text, View } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 import { tema } from "@/src/data/tema";
 
 export const HomeHero = () => {
   return (
-    <View style={styles.heroe}>
+    <LinearGradient
+      colors={["#E67E22", "#F39C12"]}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={styles.heroe}
+    >
       <View style={styles.saludo}>
         <Text style={styles.textoSaludo}>¡Bienvenido!</Text>
       </View>
@@ -20,13 +26,10 @@ export const HomeHero = () => {
           <Text style={styles.textoCelda}>Historial</Text>
         </View>
         <View style={styles.celda}>
-          <Text style={styles.textoCelda}>Info</Text>
-        </View>
-        <View style={styles.celda}>
           <Text style={styles.textoCelda}>Config</Text>
         </View>
       </View>
-    </View>
+    </LinearGradient>
   );
 };
 
