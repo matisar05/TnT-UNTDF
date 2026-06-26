@@ -1,13 +1,13 @@
 import { Stack, useLocalSearchParams } from "expo-router";
-import { useCallback, useEffect, useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { useQueryClient } from "@tanstack/react-query";
 import { Image as ExpoImage } from "expo-image";
 import { Ionicons } from "@expo/vector-icons";
 import { tema } from "@/src/data/tema";
 import { obtenerProductoPorBarcode, Producto } from "@/src/data/productos";
+import { FAVORITOS_HOOK_KEY, useFavoritos } from "@/src/hooks/useFavoritos";
 import {
   addFavorito,
-  isFavorito,
   removeFavorito,
   ProductoFavorito,
 } from "@/src/services/favoritos.service";
@@ -66,30 +66,31 @@ export function PantallaProducto() {
   const producto: Producto | undefined = barcode
     ? (obtenerProductoPorBarcode(barcode) ?? productoDesdeParams(params))
     : undefined;
-  const [favorito, setFavorito] = useState(false);
 
-  useEffect(() => {
-    if (!barcode) return;
-    isFavorito(barcode).then(setFavorito);
-  }, [barcode]);
+  const queryClient = useQueryClient();
+  const { data: favoritos } = useFavoritos();
+  const favorito = favoritos?.some((f) => f.barcode === barcode) ?? false;
 
-  const toggleFavorito = useCallback(async () => {
+  async function toggleFavorito() {
     if (!producto) return;
-    if (favorito) {
-      await removeFavorito(producto.barcode);
-      setFavorito(false);
-    } else {
-      const fav: ProductoFavorito = {
-        barcode: producto.barcode,
-        nombre: producto.nombre,
-        marca: producto.marca,
-        puntuacion: producto.puntuacion,
-        imagenUrl: extraerImagenUrl(producto.imagen),
-      };
-      await addFavorito(fav);
-      setFavorito(true);
+    try {
+      if (favorito) {
+        await removeFavorito(producto.barcode);
+      } else {
+        const fav: ProductoFavorito = {
+          barcode: producto.barcode,
+          nombre: producto.nombre,
+          marca: producto.marca,
+          puntuacion: producto.puntuacion,
+          imagenUrl: extraerImagenUrl(producto.imagen),
+        };
+        await addFavorito(fav);
+      }
+      queryClient.invalidateQueries({ queryKey: FAVORITOS_HOOK_KEY });
+    } catch (error) {
+      console.error("Error al guardar/eliminar favorito", error);
     }
-  }, [producto, favorito]);
+  }
 
   if (!producto) {
     return (

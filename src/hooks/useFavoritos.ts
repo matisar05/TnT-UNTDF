@@ -1,29 +1,13 @@
-import { useState, useCallback } from "react";
-import { useFocusEffect } from "expo-router";
-import {
-  getFavoritos,
-  ProductoFavorito,
-} from "@/src/services/favoritos.service";
+import { getFavoritos } from "@/src/services/favoritos.service";
+import { useQuery } from "@tanstack/react-query";
+
+export const FAVORITOS_HOOK_KEY = ["favoritos"];
 
 export function useFavoritos() {
-  const [favoritos, setFavoritos] = useState<ProductoFavorito[]>([]);
+  const response = useQuery({
+    queryKey: FAVORITOS_HOOK_KEY,
+    queryFn: getFavoritos,
+  });
 
-  useFocusEffect(
-    useCallback(() => {
-      let cancelado = false;
-      getFavoritos().then((data) => {
-        if (!cancelado) setFavoritos(data);
-      });
-      return () => {
-        cancelado = true;
-      };
-    }, [])
-  );
-
-  const esFavorito = useCallback(
-    (barcode: string) => favoritos.some((f) => f.barcode === barcode),
-    [favoritos]
-  );
-
-  return { favoritos, esFavorito };
+  return response;
 }

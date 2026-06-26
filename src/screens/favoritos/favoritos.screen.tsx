@@ -3,14 +3,16 @@ import { FlatList, Pressable, StyleSheet, Text, View, useWindowDimensions } from
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { Image as ExpoImage } from "expo-image";
-import { useFavoritos } from "@/src/hooks/useFavoritos";
+import { FAVORITOS_HOOK_KEY, useFavoritos } from "@/src/hooks/useFavoritos";
+import { useRefreshOnFocus } from "@/src/hooks/useRefreshOnFocus";
 import { buildRoute, RUTAS } from "@/src/navigation/routes";
 import { tema } from "@/src/data/tema";
 
 const MAX_VISIBLES = 10;
 
 export function PantallaFavoritos() {
-  const { favoritos } = useFavoritos();
+  useRefreshOnFocus(FAVORITOS_HOOK_KEY);
+  const { data: favoritos = [] } = useFavoritos();
 
   if (favoritos.length === 0) {
     return (

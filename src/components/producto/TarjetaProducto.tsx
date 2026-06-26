@@ -1,14 +1,14 @@
 import { useRouter } from "expo-router";
-import { useCallback, useEffect, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { Image } from "expo-image";
 import { ImageSourcePropType } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useQueryClient } from "@tanstack/react-query";
 import { tema } from "@/src/data/tema";
 import { buildRoute, RUTAS } from "@/src/navigation/routes";
+import { FAVORITOS_HOOK_KEY, useFavoritos } from "@/src/hooks/useFavoritos";
 import {
   addFavorito,
-  isFavorito,
   removeFavorito,
   ProductoFavorito,
 } from "@/src/services/favoritos.service";
@@ -43,28 +43,29 @@ function extraerImagenUrl(imagen: unknown): string | undefined {
 
 export const TarjetaProducto = ({ nombre, marca, barcode, puntuacion = 85, imagen, ingredientes, alergenos, infoNutricional, receta }: PropsTarjetaProducto) => {
   const router = useRouter();
-  const [esFav, setEsFav] = useState(false);
+  const queryClient = useQueryClient();
+  const { data: favoritos } = useFavoritos();
+  const esFav = favoritos?.some((f) => f.barcode === barcode) ?? false;
 
-  useEffect(() => {
-    isFavorito(barcode).then(setEsFav);
-  }, [barcode]);
-
-  const toggleFavorito = useCallback(async () => {
-    if (esFav) {
-      await removeFavorito(barcode);
-      setEsFav(false);
-    } else {
-      const fav: ProductoFavorito = {
-        barcode,
-        nombre,
-        marca,
-        puntuacion,
-        imagenUrl: extraerImagenUrl(imagen),
-      };
-      await addFavorito(fav);
-      setEsFav(true);
+  async function toggleFavorito() {
+    try {
+      if (esFav) {
+        await removeFavorito(barcode);
+      } else {
+        const fav: ProductoFavorito = {
+          barcode,
+          nombre,
+          marca,
+          puntuacion,
+          imagenUrl: extraerImagenUrl(imagen),
+        };
+        await addFavorito(fav);
+      }
+      queryClient.invalidateQueries({ queryKey: FAVORITOS_HOOK_KEY });
+    } catch (error) {
+      console.error("Error al guardar/eliminar favorito", error);
     }
-  }, [esFav, barcode, nombre, marca, puntuacion, imagen]);
+  }
 
   const irAProducto = () => {
     router.push(buildRoute(RUTAS.PRODUCTO, {

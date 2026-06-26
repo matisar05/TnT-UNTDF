@@ -29,8 +29,3 @@ export async function removeFavorito(barcode: string): Promise<void> {
   const filtrados = favoritos.filter((f) => f.barcode !== barcode);
   await AsyncStorage.setItem(FAVORITOS_KEY, JSON.stringify(filtrados));
 }
-
-export async function isFavorito(barcode: string): Promise<boolean> {
-  const favoritos = await getFavoritos();
-  return favoritos.some((f) => f.barcode === barcode);
-}
