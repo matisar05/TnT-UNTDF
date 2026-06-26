@@ -3,6 +3,7 @@ import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import { TarjetaProducto } from "@/src/components/producto/TarjetaProducto";
 import { useProductos } from "@/src/hooks/useProductos";
+import { tema } from "@/src/data/tema";
 
 type ParamsCategoria = {
   slug: string;
@@ -16,16 +17,24 @@ export function PantallaCategoria() {
     ? slug.charAt(0).toUpperCase() + slug.slice(1).replace("-", " ")
     : "Categoría";
 
-  const { data: productos, isLoading, isError, error } = useProductos(
-    tag ?? slug ?? ""
-  );
+  const {
+    data,
+    isLoading,
+    isError,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useProductos(tag ?? slug ?? "");
+
+  const productos = data?.pages.flatMap((p) => p.productos) ?? [];
 
   if (isLoading) {
     return (
       <View style={styles.contenedor}>
         <Stack.Screen options={{ title: titulo }} />
         <View style={styles.centrado}>
-          <ActivityIndicator size="large" color="#E67E22" />
+          <ActivityIndicator size="large" color={tema.colors.primary} />
         </View>
       </View>
     );
@@ -47,7 +56,7 @@ export function PantallaCategoria() {
     <View style={styles.contenedor}>
       <Stack.Screen options={{ title: titulo }} />
       <FlashList
-        data={productos ?? []}
+        data={productos}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <TarjetaProducto
@@ -63,15 +72,26 @@ export function PantallaCategoria() {
           />
         )}
         contentContainerStyle={styles.contenidoLista}
-        ListHeaderComponent={
+ListHeaderComponent={
           <Text style={styles.cantidadResultados}>
-            {productos?.length ?? 0} productos encontrados
+            {productos.length} productos cargados
           </Text>
         }
         ListEmptyComponent={
           <Text style={styles.vacio}>No se encontraron productos</Text>
         }
-        ItemSeparatorComponent={() => <View style={{ height: 8 }} />}
+        ListFooterComponent={
+          isFetchingNextPage ? (
+            <ActivityIndicator
+              style={styles.loader}
+              color={tema.colors.primary}
+            />
+          ) : null
+        }
+        onEndReached={() => {
+          if (hasNextPage && !isFetchingNextPage) fetchNextPage();
+        }}
+        onEndReachedThreshold={0.3}
       />
     </View>
   );
@@ -80,7 +100,7 @@ export function PantallaCategoria() {
 const styles = StyleSheet.create({
   contenedor: {
     flex: 1,
-    backgroundColor: "#FFF9F0",
+    backgroundColor: tema.colors.background,
   },
   contenidoLista: {
     paddingHorizontal: 20,
@@ -88,7 +108,7 @@ const styles = StyleSheet.create({
   },
   cantidadResultados: {
     fontSize: 12,
-    color: "#7F8C8D",
+    color: tema.colors.textSecondary,
     marginBottom: 16,
     marginTop: 16,
     fontWeight: "500",
@@ -107,13 +127,16 @@ const styles = StyleSheet.create({
   },
   errorDetalle: {
     fontSize: 14,
-    color: "#7F8C8D",
+    color: tema.colors.textSecondary,
     textAlign: "center",
   },
   vacio: {
     fontSize: 14,
-    color: "#7F8C8D",
+    color: tema.colors.textSecondary,
     textAlign: "center",
     marginTop: 32,
+  },
+  loader: {
+    marginVertical: 20,
   },
 });
