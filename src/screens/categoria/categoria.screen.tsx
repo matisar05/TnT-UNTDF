@@ -64,6 +64,7 @@ export function PantallaCategoria() {
             marca={item.marca}
             barcode={item.barcode}
             puntuacion={item.puntuacion}
+            nutriscore={item.nutriscore}
             imagen={item.imagen}
             ingredientes={item.ingredientes}
             alergenos={item.alergenos}

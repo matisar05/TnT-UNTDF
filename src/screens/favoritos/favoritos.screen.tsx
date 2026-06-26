@@ -48,22 +48,33 @@ export function PantallaFavoritos() {
   );
 }
 
+const NUTRISCORE: Record<string, { bg: string; texto: string; letra: string }> = {
+  a: { bg: "#038141", texto: "#FFFFFF", letra: "A" },
+  b: { bg: "#85BB2F", texto: "#FFFFFF", letra: "B" },
+  c: { bg: "#FECB02", texto: "#2D3436", letra: "C" },
+  d: { bg: "#EE8100", texto: "#FFFFFF", letra: "D" },
+  e: { bg: "#E63E11", texto: "#FFFFFF", letra: "E" },
+};
+
 function TarjetaFavoritoGrid({
   barcode,
   nombre,
   marca,
   puntuacion,
+  nutriscore,
   imagenUrl,
 }: {
   barcode: string;
   nombre: string;
   marca: string;
   puntuacion: number;
+  nutriscore?: string;
   imagenUrl?: string;
 }) {
   const router = useRouter();
   const { width } = useWindowDimensions();
   const cardWidth = (width - 52) / 2;
+  const ns = nutriscore ? NUTRISCORE[nutriscore] : undefined;
 
   const irAProducto = useCallback(() => {
     router.push(buildRoute(RUTAS.PRODUCTO, {
@@ -102,8 +113,11 @@ function TarjetaFavoritoGrid({
         <Text style={styles.marcaGrid} numberOfLines={1}>{marca}</Text>
         <Text style={styles.nombreGrid} numberOfLines={2}>{nombre}</Text>
         <View style={styles.filaPuntajeGrid}>
-          <View style={[styles.puntoPuntajeGrid, { backgroundColor: puntuacion > 70 ? "#2ECC71" : "#F1C40F" }]} />
-          <Text style={styles.textoPuntajeGrid}>{puntuacion}/100</Text>
+          <View style={[styles.badgeNutriscore, { backgroundColor: ns?.bg ?? "#B2BEC3" }]}>
+            <Text style={[styles.textoNutriscore, { color: ns?.texto ?? "#FFFFFF" }]}>
+              {ns?.letra ?? "N/D"}
+            </Text>
+          </View>
         </View>
       </View>
     </Pressable>
@@ -175,16 +189,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 4,
   },
-  puntoPuntajeGrid: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    marginRight: 5,
+  badgeNutriscore: {
+    paddingHorizontal: 7,
+    paddingVertical: 2,
+    borderRadius: 5,
+    minWidth: 26,
+    alignItems: "center",
   },
-  textoPuntajeGrid: {
+  textoNutriscore: {
     fontSize: 10,
-    color: tema.colors.textSecondary,
-    fontWeight: "500",
+    fontWeight: "700",
   },
   espacioFinal: {
     height: 32,

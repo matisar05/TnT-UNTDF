@@ -51,6 +51,7 @@ export function transformarProductoBusqueda(api: ProductoBusqueda): Producto {
     marca: api.brands || "Marca desconocida",
     barcode: api.code,
     puntuacion: nutriscoreAPuntuacion(api.nutriscore_grade),
+    nutriscore: api.nutriscore_grade?.toLowerCase(),
     imagen: api.image_url ? { uri: api.image_url } : undefined,
     ingredientes: parsearLista(
       api.ingredients_text_es || api.ingredients_text

@@ -7,6 +7,7 @@ export interface ProductoFavorito {
   nombre: string;
   marca: string;
   puntuacion: number;
+  nutriscore?: string;
   imagenUrl?: string;
 }
 

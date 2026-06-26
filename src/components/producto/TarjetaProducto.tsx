@@ -13,11 +13,20 @@ import {
   ProductoFavorito,
 } from "@/src/services/favoritos.service";
 
+const NUTRISCORE: Record<string, { bg: string; texto: string; letra: string }> = {
+  a: { bg: "#038141", texto: "#FFFFFF", letra: "A" },
+  b: { bg: "#85BB2F", texto: "#FFFFFF", letra: "B" },
+  c: { bg: "#FECB02", texto: "#2D3436", letra: "C" },
+  d: { bg: "#EE8100", texto: "#FFFFFF", letra: "D" },
+  e: { bg: "#E63E11", texto: "#FFFFFF", letra: "E" },
+};
+
 interface PropsTarjetaProducto {
   nombre: string;
   marca: string;
   barcode: string;
   puntuacion?: number;
+  nutriscore?: string;
   imagen?: ImageSourcePropType;
   ingredientes?: string[];
   alergenos?: string[];
@@ -41,11 +50,12 @@ function extraerImagenUrl(imagen: unknown): string | undefined {
   return undefined;
 }
 
-export const TarjetaProducto = ({ nombre, marca, barcode, puntuacion = 85, imagen, ingredientes, alergenos, infoNutricional, receta }: PropsTarjetaProducto) => {
+export const TarjetaProducto = ({ nombre, marca, barcode, puntuacion = 0, nutriscore, imagen, ingredientes, alergenos, infoNutricional, receta }: PropsTarjetaProducto) => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { data: favoritos } = useFavoritos();
   const esFav = favoritos?.some((f) => f.barcode === barcode) ?? false;
+  const ns = nutriscore ? NUTRISCORE[nutriscore] : undefined;
 
   async function toggleFavorito() {
     try {
@@ -57,6 +67,7 @@ export const TarjetaProducto = ({ nombre, marca, barcode, puntuacion = 85, image
           nombre,
           marca,
           puntuacion,
+          nutriscore,
           imagenUrl: extraerImagenUrl(imagen),
         };
         await addFavorito(fav);
@@ -73,6 +84,7 @@ export const TarjetaProducto = ({ nombre, marca, barcode, puntuacion = 85, image
       nombre,
       marca,
       puntuacion: String(puntuacion),
+      nutriscore: nutriscore ?? "",
       imagenUrl: extraerImagenUrl(imagen) ?? "",
       ingredientes: JSON.stringify(ingredientes ?? []),
       alergenos: JSON.stringify(alergenos ?? []),
@@ -102,9 +114,10 @@ export const TarjetaProducto = ({ nombre, marca, barcode, puntuacion = 85, image
         <Text style={styles.nombre} numberOfLines={2}>{nombre}</Text>
 
         <View style={styles.pie}>
-          <View style={styles.contenedorPuntaje}>
-            <View style={[styles.puntoPuntaje, { backgroundColor: puntuacion > 70 ? "#2ECC71" : "#F1C40F" }]} />
-            <Text style={styles.textoPuntaje}>{puntuacion}/100</Text>
+          <View style={[styles.badgeNutriscore, { backgroundColor: ns?.bg ?? "#B2BEC3" }]}>
+            <Text style={[styles.textoNutriscore, { color: ns?.texto ?? "#FFFFFF" }]}>
+              {ns?.letra ?? "N/D"}
+            </Text>
           </View>
           <Pressable
             onPress={toggleFavorito}
@@ -173,19 +186,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 8,
   },
-  contenedorPuntaje: {
-    flexDirection: "row",
+  badgeNutriscore: {
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 6,
+    minWidth: 32,
     alignItems: "center",
   },
-  puntoPuntaje: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    marginRight: 6,
-  },
-  textoPuntaje: {
+  textoNutriscore: {
     fontSize: 12,
-    color: tema.colors.textSecondary,
-    fontWeight: "500",
+    fontWeight: "700",
   },
 });

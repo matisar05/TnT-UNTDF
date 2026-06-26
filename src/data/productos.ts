@@ -17,6 +17,7 @@ export interface Producto {
   marca: string;
   barcode: string;
   puntuacion: number;
+  nutriscore?: string;
   imagen?: ImageSourcePropType;
   ingredientes: string[];
   alergenos: string[];

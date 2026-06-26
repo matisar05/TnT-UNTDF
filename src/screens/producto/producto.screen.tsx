@@ -12,11 +12,20 @@ import {
   ProductoFavorito,
 } from "@/src/services/favoritos.service";
 
+const NUTRISCORE: Record<string, { bg: string; texto: string; letra: string }> = {
+  a: { bg: "#038141", texto: "#FFFFFF", letra: "A" },
+  b: { bg: "#85BB2F", texto: "#FFFFFF", letra: "B" },
+  c: { bg: "#FECB02", texto: "#2D3436", letra: "C" },
+  d: { bg: "#EE8100", texto: "#FFFFFF", letra: "D" },
+  e: { bg: "#E63E11", texto: "#FFFFFF", letra: "E" },
+};
+
 type ParamsProducto = {
   barcode: string;
   nombre?: string;
   marca?: string;
   puntuacion?: string;
+  nutriscore?: string;
   imagenUrl?: string;
   ingredientes?: string;
   alergenos?: string;
@@ -42,6 +51,7 @@ function productoDesdeParams(params: ParamsProducto): Producto {
     marca: params.marca ?? "",
     barcode: params.barcode,
     puntuacion: Number(params.puntuacion ?? 0),
+    nutriscore: params.nutriscore || undefined,
     imagen: imgUrl ? { uri: imgUrl } : undefined,
     ingredientes: JSON.parse(params.ingredientes ?? "[]"),
     alergenos: JSON.parse(params.alergenos ?? "[]"),
@@ -82,6 +92,7 @@ export function PantallaProducto() {
           nombre: producto.nombre,
           marca: producto.marca,
           puntuacion: producto.puntuacion,
+          nutriscore: producto.nutriscore,
           imagenUrl: extraerImagenUrl(producto.imagen),
         };
         await addFavorito(fav);
@@ -105,7 +116,7 @@ export function PantallaProducto() {
     );
   }
 
-  const puntuacionColor = producto.puntuacion > 70 ? "#2ECC71" : "#F1C40F";
+  const ns = producto.nutriscore ? NUTRISCORE[producto.nutriscore] : undefined;
 
   return (
     <ScrollView style={styles.scroll}>
@@ -138,11 +149,13 @@ export function PantallaProducto() {
         <Text style={styles.marca}>{producto.marca}</Text>
         <Text style={styles.nombre}>{producto.nombre}</Text>
 
-        <View style={styles.filaPuntuacion}>
-          <View style={[styles.puntoPuntaje, { backgroundColor: puntuacionColor }]} />
-          <Text style={styles.textoPuntaje}>
-            Puntuación nutricional: {producto.puntuacion}/100
-          </Text>
+        <View style={styles.filaNutriscore}>
+          <View style={[styles.badgeNutriscore, { backgroundColor: ns?.bg ?? "#B2BEC3" }]}>
+            <Text style={[styles.textoNutriscore, { color: ns?.texto ?? "#FFFFFF" }]}>
+              {ns?.letra ?? "Sin score"}
+            </Text>
+          </View>
+          <Text style={styles.etiquetaNutriscore}>Nutri-Score</Text>
         </View>
       </View>
 
@@ -286,18 +299,24 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: tema.colors.text,
   },
-  filaPuntuacion: {
+  filaNutriscore: {
     flexDirection: "row",
     alignItems: "center",
     marginTop: 12,
+    gap: 10,
   },
-  puntoPuntaje: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-    marginRight: 8,
+  badgeNutriscore: {
+    paddingHorizontal: 14,
+    paddingVertical: 5,
+    borderRadius: 8,
+    minWidth: 44,
+    alignItems: "center",
   },
-  textoPuntaje: {
+  textoNutriscore: {
+    fontSize: 16,
+    fontWeight: "800",
+  },
+  etiquetaNutriscore: {
     fontSize: 14,
     color: tema.colors.textSecondary,
     fontWeight: "500",
