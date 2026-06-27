@@ -4,6 +4,8 @@ export const RUTAS = {
   INICIO: "/",
   LISTAS: "/listas",
   FAVORITOS: "/favoritos",
+  BUSQUEDA: "/busqueda",
+  CAMARA: "/camara",
   CATEGORIA: "/categoria/[slug]",
   PRODUCTO: "/producto/[barcode]",
 } as const;

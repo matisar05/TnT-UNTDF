@@ -35,7 +35,13 @@
           }
         }
       ],
-      "expo-image"
+      "expo-image",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Steaming Up necesita acceso a la camara para escanear codigos de barras."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

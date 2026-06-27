@@ -1,8 +1,13 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { tema } from "@/src/data/tema";
+import { buildRoute, RUTAS } from "@/src/navigation/routes";
 
 export const HomeHero = () => {
+  const router = useRouter();
+
   return (
     <LinearGradient
       colors={["#E67E22", "#F39C12"]}
@@ -14,9 +19,18 @@ export const HomeHero = () => {
         <Text style={styles.textoSaludo}>¡Bienvenido!</Text>
       </View>
 
-      <View style={[styles.barraBusqueda, styles.mt8]}>
+      <Pressable
+        style={[styles.barraBusqueda, styles.mt8]}
+        onPress={() => router.push(buildRoute(RUTAS.BUSQUEDA))}
+      >
+        <Ionicons
+          name="search-outline"
+          size={16}
+          color={tema.colors.textSecondary}
+          style={styles.iconoBusqueda}
+        />
         <Text style={styles.textoBusqueda}>Buscar producto...</Text>
-      </View>
+      </Pressable>
 
       <View style={[styles.accionesRapidas, styles.mt8]}>
         <View style={styles.celda}>
@@ -52,6 +66,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     borderRadius: 8,
     padding: 12,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  iconoBusqueda: {
+    marginRight: 8,
   },
   textoBusqueda: {
     color: tema.colors.textSecondary,

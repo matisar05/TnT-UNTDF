@@ -60,6 +60,21 @@ export default function RootLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="camara"
+        options={{
+          title: "Camara",
+          headerTitle: "Camara",
+          tabBarLabel: "Camara",
+          tabBarIcon: ({ color, size, focused }) => (
+            <Ionicons
+              name={focused ? "barcode" : "barcode-outline"}
+              size={size}
+              color={color}
+            />
+          ),
+        }}
+      />
     </Tabs>
   );
 }
